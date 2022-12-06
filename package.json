@@ -1,0 +1,28 @@
+{
+  "name": "metro-minify-obfuscator",
+  "version": "0.64.0",
+  "description": "🚇 Minifier for Metro based on javscript-obfuscator.",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:facebook/metro.git"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && babel ./src -d ./dist",
+    "prepublish": "yarn build"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "javascript-obfuscator": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "rimraf": "^3.0.2"
+  }
+}
