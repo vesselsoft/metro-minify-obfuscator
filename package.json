@@ -11,6 +11,9 @@
     "dist",
     "package.json"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "build": "rimraf ./dist && babel ./src -d ./dist",
     "prepublish": "yarn build"
