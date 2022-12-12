@@ -11,6 +11,7 @@
 "use strict";
 
 const jso = require("javascript-obfuscator");
+const composer = require("multi-stage-sourcemap").transfer;
 
 function obfuscator(options) {
   const result = obfuscate(options);
@@ -19,25 +20,29 @@ function obfuscator(options) {
     return { code: result.code };
   }
 
-  const map = JSON.parse(result.map);
+  const map = JSON.parse(
+    composer({
+      fromSourceMap: JSON.parse(result.map),
+      toSourceMap: options.map,
+    })
+  );
+  map["sources"] = [options.filename];
 
-  return { code: result.code, map: { ...map, sources: [options.filename] } };
+  return { code: result.code, map };
 }
 
 function obfuscate({ code, reserved, config, filename }) {
   const result = jso.obfuscate(code, {
     sourceMap: true,
     inputFileName: filename,
-    sourceMapSourcesMode: "sources",
-    reservedNames: reserved,
-    target: "browser-no-eval",
     stringArray: false,
     compact: true,
     controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.8,
+    controlFlowFlatteningThreshold: 0.75,
     identifierNamesGenerator: "hexadecimal",
     numbersToExpressions: true,
     splitStrings: true,
+    splitStringsChunkLength: 3,
     transformObjectKeys: true,
     simplify: true,
     disableConsoleOutput: true,
