@@ -1,6 +1,6 @@
 {
   "name": "metro-minify-obfuscator",
-  "version": "0.64.1",
+  "version": "0.64.2",
   "description": "🚇 Minifier for Metro based on javscript-obfuscator.",
   "main": "dist/index.js",
   "repository": {
@@ -20,8 +20,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "multi-stage-sourcemap": "^0.3.1",
-    "javascript-obfuscator": "^4.0.0"
+    "javascript-obfuscator": "^4.0.0",
+    "multi-stage-sourcemap": "^0.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
