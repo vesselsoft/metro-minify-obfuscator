@@ -14,17 +14,29 @@ const jso = require("javascript-obfuscator");
 const composer = require("multi-stage-sourcemap").transfer;
 
 function obfuscator(options) {
-  if (
-    options.defaultMinifierPath &&
-    ((options.filter && !options.filter(options.filename)) ||
-      !(options.includeNodeModules ?? true))
-  ) {
-    return options.defaultMinifierPath({
-      ...options,
-      config: options.defaultMinifierConfig ?? {},
-    });
+  const { config } = options;
+  const isFiltered = !!config.filter && config.filter(options.filename);
+  const isNMFile = options.filename.indexOf("node_modules") >= 0;
+  const includeNM = isNMFile && (config.includeNodeModules ?? true) === true;
+
+  if (!config.defaultMinifierPath || isFiltered || includeNM || !isNMFile) {
+    if (config.trace) {
+      console.log("Obfuscating " + options.filename);
+    }
+    return runJSO(options);
   }
 
+  if (config.trace) {
+    console.log("Skip obfuscating " + options.filename);
+  }
+
+  return require(config.defaultMinifierPath)({
+    ...options,
+    config: config.defaultMinifierConfig ?? {},
+  });
+}
+
+function runJSO(options) {
   const result = obfuscate(options);
 
   if (!options.map || result.map == null) {
