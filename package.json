@@ -1,6 +1,6 @@
 {
   "name": "metro-minify-obfuscator",
-  "version": "0.64.2",
+  "version": "1.0.0",
   "description": "🚇 Minifier for Metro based on javscript-obfuscator.",
   "main": "dist/index.js",
   "repository": {
