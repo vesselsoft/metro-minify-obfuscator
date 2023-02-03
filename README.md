@@ -58,3 +58,35 @@ module.exports = {
   "unicodeEscapeSequence": true
 }
 ```
+
+# Release History
+- **v1.0.0** - Add additional option to filter / exclude node_modules file from obfuscation. ⚠️ **upgrading to this version need update to your metro.config.js please be aware**
+```js
+// before
+module.exports = {
+  transformer: {
+    ...
+    minifierPath: 'metro-minify-obfuscator', // <- add this
+    minifierConfig: {
+      // put additional javscript-obfuscator configuration here
+    },
+  },
+};
+
+// after
+module.exports = {
+  transformer: {
+    ...
+    minifierPath: 'metro-minify-obfuscator', // <- add this
+    minifierConfig: {
+      "defaultMinifierPath": require('metro-minify-uglify'), // required if filter/includeNodeModules options is set, can be metro-minify-uglify or metro-minify-terser dependes on RN version / available installed minifier
+      "filter": (filename) => true, // return true to obfuscate
+      "includeNodeModules": true, // set false to ignore node_modules from obfuscation
+      "obfuscatorOptions": {
+        // put additional javscript-obfuscator configuration here
+      }
+    },
+  },
+};
+```
+- **v0.x.x** - Initial fork from `metro-minify-uglify` configured with JSO library
