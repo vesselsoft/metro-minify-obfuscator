@@ -14,6 +14,17 @@ const jso = require("javascript-obfuscator");
 const composer = require("multi-stage-sourcemap").transfer;
 
 function obfuscator(options) {
+  if (
+    options.defaultMinifierPath &&
+    ((options.filter && !options.filter(options.filename)) ||
+      !(options.includeNodeModules ?? true))
+  ) {
+    return options.defaultMinifierPath({
+      ...options,
+      config: options.defaultMinifierConfig ?? {},
+    });
+  }
+
   const result = obfuscate(options);
 
   if (!options.map || result.map == null) {

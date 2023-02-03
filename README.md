@@ -23,31 +23,38 @@ module.exports = {
   transformer: {
     ...
     minifierPath: 'metro-minify-obfuscator', // <- add this
-    minifierConfig: {}, // <- put additional javscript-obfuscator configuration here
+    minifierConfig: {
+      "defaultMinifierPath": require('metro-minify-uglify'), // required if filter/includeNodeModules options is set, can be metro-minify-uglify or metro-minify-terser dependes on RN version / available installed minifier
+      "filter": (filename) => true, // return true to obfuscate
+      "includeNodeModules": true, // set false to ignore node_modules from obfuscation
+      "obfuscatorOptions": {
+        // put additional javscript-obfuscator configuration here
+      }
+    },
   },
 };
 ```
 
-- you can add [additional obfuscation](https://github.com/javascript-obfuscator/javascript-obfuscator#javascript-obfuscator-options) config to the `minifierConfig` properties (⚠️ **NOT ALL OPTION IS SUPPORTED ON REACT-NATIVE, IT MIGHT MAKE YOUR CODE NOT WORKING** )
+- you can add [additional obfuscation](https://github.com/javascript-obfuscator/javascript-obfuscator#javascript-obfuscator-options) config to the `minifierConfig` properties (⚠️ **NOT ALL OPTION IS GUARANTEED WORKING ON REACT-NATIVE, IT MIGHT BREAK YOUR APPS 🙈** )
 - run packager with `--reset-cache` argument to clear metro cache
 
 ## Default Options
 
 ```json
 {
-    "stringArray": false,
-    "compact": true,
-    "controlFlowFlattening": true,
-    "controlFlowFlatteningThreshold": 0.75,
-    "identifierNamesGenerator": "hexadecimal",
-    "numbersToExpressions": true,
-    "splitStrings": true,
-    splitStringsChunkLength: 3,
-    "transformObjectKeys": true,
-    "simplify": true,
-    "disableConsoleOutput": true,
-    "log": false,
-    "selfDefending": true,
-    "unicodeEscapeSequence": true,
+  "stringArray": false,
+  "compact": true,
+  "controlFlowFlattening": true,
+  "controlFlowFlatteningThreshold": 0.75,
+  "identifierNamesGenerator": "hexadecimal",
+  "numbersToExpressions": true,
+  "splitStrings": true,
+  "splitStringsChunkLength": 3,
+  "transformObjectKeys": true,
+  "simplify": true,
+  "disableConsoleOutput": true,
+  "log": false,
+  "selfDefending": true,
+  "unicodeEscapeSequence": true
 }
 ```
