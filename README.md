@@ -14,9 +14,27 @@ or
 npm i --save-dev metro-minify-obfuscator
 ```
 
-## Usage
+## Usage for React Native 0.73+
 
-- update `metro.config.js` on your project
+```js
+module.exports = {
+  transformer: {
+    ...
+    minifierPath: 'metro-minify-obfuscator',
+    minifierConfig: {
+      defaultMinifierPath: require('metro-minify-terser'),
+      filter: (filename) => true,
+      includeNodeModules: true,
+      trace: false,
+      obfuscatorOptions: {
+        // put additional javscript-obfuscator configuration here
+      }
+    },
+  },
+};
+```
+
+## Usage for React Native versions below 0.73
 
 ```js
 module.exports = {
@@ -38,6 +56,12 @@ module.exports = {
 
 - you can add [additional obfuscation](https://github.com/javascript-obfuscator/javascript-obfuscator#javascript-obfuscator-options) config to the `minifierConfig` properties (⚠️ **NOT ALL OPTION IS GUARANTEED WORKING ON REACT-NATIVE, IT MIGHT BREAK YOUR APPS 🙈** )
 - run packager with `--reset-cache` argument to clear metro cache
+
+## Minifier Notes
+
+- For React Native 0.73+, it's highly recommended to use `metro-minify-terser` as the default minifier
+- Terser provides better support for modern JavaScript ES6+ features and improved performance
+- For React Native versions below 0.73, you can continue using `metro-minify-uglify`
 
 ## Default Options
 
@@ -69,35 +93,5 @@ module.exports = {
 # Release History
 
 - **v1.0.x** - Add additional option to filter / exclude node_modules file from obfuscation. ⚠️ **upgrading to this version need update to your metro.config.js please be aware**
-
-```js
-// before
-module.exports = {
-  transformer: {
-    ...
-    minifierPath: 'metro-minify-obfuscator', // <- add this
-    minifierConfig: {
-      // put additional javscript-obfuscator configuration here
-    },
-  },
-};
-
-// after
-module.exports = {
-  transformer: {
-    ...
-    minifierPath: 'metro-minify-obfuscator', // <- add this
-    minifierConfig: {
-      defaultMinifierPath: require('metro-minify-uglify'), // required if filter/includeNodeModules options is set, can be metro-minify-uglify or metro-minify-terser dependes on RN version / available installed minifier
-      filter: (filename) => true, // return true to obfuscate
-      includeNodeModules: true, // set false to ignore node_modules from obfuscation
-      trace: false, // show output log
-      obfuscatorOptions: {
-        // put additional javscript-obfuscator configuration here
-      }
-    },
-  },
-};
-```
 
 - **v0.x.x** - Initial fork from `metro-minify-uglify` configured with JSO library
